@@ -30,14 +30,13 @@ type PokemonDetail = {
   }[];
 };
 
-const fetchPokemonDetail = async (
-  name: string
-): Promise<PokemonDetail | unknown> => {
+const fetchPokemonDetail = async (name: string): Promise<PokemonDetail> => {
   const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
   if (!res.ok) {
     throw new Error("Network response was not ok");
   }
-  return res.json();
+  const json: unknown = await res.json();
+  return json as PokemonDetail;
 };
 
 const PokemonDetail = (): ReactElement => {
@@ -48,7 +47,7 @@ const PokemonDetail = (): ReactElement => {
     isLoading,
     isError,
     error,
-  } = useQuery(
+  } = useQuery<PokemonDetail, Error>(
     ["pokemon", router.query.id],
     () => fetchPokemonDetail(router.query.id as string),
     {
@@ -65,7 +64,11 @@ const PokemonDetail = (): ReactElement => {
   }
 
   if (isError) {
-    return <div>Error: {error.message}</div>;
+    return (
+      <div>
+        Error: {"message" in error ? error.message : "Something went wrong"}
+      </div>
+    );
   }
 
   return (
@@ -77,7 +80,7 @@ const PokemonDetail = (): ReactElement => {
       {pokemon ? (
         <div>
           <h2>{pokemon.name}</h2>
-          <p>Type: {pokemon.types.map((t) => t.type.name).join(", ")}</p>
+          <p>Type: {pokemon.types.map((t) => t?.type.name).join(", ")}</p>
           <p>
             Abilities: {pokemon.abilities.map((a) => a.ability.name).join(", ")}
           </p>
