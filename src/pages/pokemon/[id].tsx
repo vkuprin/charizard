@@ -30,7 +30,9 @@ type PokemonDetail = {
   }[];
 };
 
-const fetchPokemonDetail = async (name: string): Promise<PokemonDetail> => {
+const fetchPokemonDetail = async (
+  name: string
+): Promise<PokemonDetail | unknown> => {
   const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
   if (!res.ok) {
     throw new Error("Network response was not ok");

@@ -23,13 +23,15 @@ type PokemonResponse = {
   next: string;
   previous: string;
   results: Pokemon[];
+  limit?: number;
+  offset?: number;
 };
 
 const fetchPokemon = async (
   page = 0,
-  limit,
+  limit = 5,
   searchTerm = ""
-): Promise<PokemonResponse> => {
+): Promise<PokemonResponse | unknown> => {
   const offset = page * limit;
   const search = searchTerm ? `/${searchTerm}?` : "?";
 
@@ -44,7 +46,10 @@ const fetchPokemon = async (
 
 export const getStaticProps: GetStaticProps = async () => {
   const queryClient = new QueryClient();
-  await queryClient.prefetchQuery(["pokemon"], fetchPokemon);
+  await queryClient.prefetchQuery(
+    ["pokemon"],
+    fetchPokemon as unknown as () => Promise<PokemonResponse>
+  );
 
   return {
     props: {
