@@ -79,6 +79,7 @@ const globalStyles = `
 
 const MyApp = ({ Component, pageProps }: AppProps): ReactElement => (
   <QueryClientProvider client={queryClient}>
+    {/* eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment */}
     <Hydrate state={pageProps.dehydratedState}>
       <style jsx global>
         {globalStyles}
