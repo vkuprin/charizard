@@ -5,9 +5,9 @@ import {
   QueryClientProvider,
 } from "@tanstack/react-query";
 import { type ReactElement } from "react";
-import { Nabla } from "next/font/google";
+import { Inter } from "next/font/google";
 
-const nabla = Nabla({ subsets: [], preload: true });
+const nabla = Inter({ subsets: [], preload: true });
 
 const queryClient = new QueryClient();
 
